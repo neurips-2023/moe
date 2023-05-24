@@ -1,0 +1,40 @@
+# Makefile for neurips xai workshop code
+# Type "make" or "make all" to build the complete development environment
+# Type "make help" for a list of commands
+# Type "make clean" to clean the venv
+
+# Variables for the Makefile
+.PHONY = all clean
+SHELL := /bin/bash
+
+
+# Makefile commands, see below for actual builds
+
+## all              : build the venv
+all: virtual_env install_torch
+
+## clean	  : remove venv
+clean:
+	-rm -rf mnn
+
+## help             : show all commands.
+# Note the double '##' in the line above: this is what's matched to produce
+# the list of commands.
+help                : Makefile
+	@sed -n 's/^## //p' $<
+
+## virtual_env        : Install/update a virtual environment with needed packages
+
+install_torch:
+	conda activate mnn; \
+        conda install pytorch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 cudatoolkit=11.1 -c pytorch -c conda-forge;
+
+# Actual Target work here
+
+virtual_env:
+	conda activate mnn; \
+	pip install --upgrade pip; \
+	pip install setuptools --upgrade; \
+        pip install  -r requirements.linux.txt; \
+	python -m ipykernel install --user --name mnn --display-name "mnn";	
+
